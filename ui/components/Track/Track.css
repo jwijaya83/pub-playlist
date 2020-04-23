@@ -1,3 +1,46 @@
 .track {
+  display: flex;
+  height: 25px;
+  align-items: center;
+  padding: 4px 10px;
+  justify-content: space-between;
+  position: relative;
+  background: transparent;
+  transition: all 0.1s ease-out;
+}
 
+.track:hover {
+  background: rgba(34,34,34,0.6);
+}
+
+.track:hover .add-to-playlist {
+  display: block;
+}
+
+.track-title {
+  transition: all 0.1s ease-out;
+  color: #fff;
+  width: calc(100% - 30px);
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  font-weight: 300;
+}
+
+.add-to-playlist {
+  position: absolute;
+  background: transparent;
+  border: none;
+  box-shadow: none;
+  cursor: pointer;
+  color: #fff;
+  padding: 5px;
+  transition: all 0.1s ease-out;
+  top: 0;
+  right: 5px;
+  display: none;
+}
+
+.add-to-playlist:hover {
+  transform: scale(1.15);
 }

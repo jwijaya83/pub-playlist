@@ -23,8 +23,8 @@ shuffle(albums)
 
 export const AlbumList = () => (
   <div className="album-list">
-    {Object.keys(shuffledAlbums).map((albumName) => (
-      <div key={albumName}><Album name={albumName} tracks={albums[albumName]} /></div>
+    {Object.keys(shuffledAlbums).map((albumName, index) => (
+      <div key={albumName}><Album name={albumName} tracks={albums[albumName]} index={index} /></div>
     ))}
   </div>
 )
