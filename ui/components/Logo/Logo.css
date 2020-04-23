@@ -1,0 +1,11 @@
+.Logo {
+  display: block;
+  width: 300px;
+  height: 80px;
+  background: no-repeat center url('/logo.png');
+  background-size: contain;
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: 20px;
+  margin-bottom: 20px;
+}

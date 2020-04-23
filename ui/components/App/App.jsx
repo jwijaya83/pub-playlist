@@ -1,9 +1,15 @@
-import React from 'react';
-import './App.css';
+import React from "react";
+import "normalize.css/normalize.css";
+import "./App.css";
+import { AlbumList } from "../AlbumList/AlbumList";
+import { Logo } from "../Logo/Logo";
 
 function App() {
   return (
-    <h1>Playlistify</h1>
+    <>
+      <Logo />
+      <AlbumList />
+    </>
   );
 }
 
