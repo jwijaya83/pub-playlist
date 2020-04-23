@@ -15,11 +15,15 @@ const albums = tracks.reduce((acc, track) => {
   }
   return acc
 }, {})
-// shuffle(albums)
+const shuffledAlbums = shuffle(Object.keys(albums)).reduce((acc, albumName) => {
+  acc[albumName] = albums[albumName]
+  return acc
+}, {})
+shuffle(albums)
 
 export const AlbumList = () => (
   <div className="album-list">
-    {Object.keys(albums).map((albumName) => (
+    {Object.keys(shuffledAlbums).map((albumName) => (
       <div key={albumName}><Album name={albumName} tracks={albums[albumName]} /></div>
     ))}
   </div>
