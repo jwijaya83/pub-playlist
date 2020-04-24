@@ -6,6 +6,15 @@ The next level playlist experience
 
 ### Server
 
+Create DB
+
+`docker run -d --name postgres -e POSTGRES_PASSWORD=postgres -e POSTGRES_USER=postgres -p "5432:5432" postgres`
+
+Create PGAdmin4
+
+`docker run -d --name pgadmin4 -e PGADMIN_DEFAULT_EMAIL=pgadmin4 -e PGADMIN_DEFAULT_PASSWORD=pgadmin4 -p "8880:80" dpage/pgadmin4`
+
+Start server
 `npm run start:server`
 
 ### UI

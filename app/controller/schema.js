@@ -1,9 +1,8 @@
 const { buildSchema } = require('graphql');
 const graphqlHTTP = require('express-graphql');
-const Songs = require('./songs');
 const path = require('path');
-
-let library = new Songs(path.join(__dirname, '..', 'data'));
+const playlistRepository = require('../repository/playlist');
+const songRepository = require('../repository/song');
 
 const schema = buildSchema(`
     type Query {
@@ -31,20 +30,12 @@ const schema = buildSchema(`
 `);
 
 const rootResolver = {
-    library: graphqlInput => library.getSong(graphqlInput && graphqlInput.id),
-    libraries: library.getLibrary(),
-    playlist: graphqlInput => library.getPlaylist(graphqlInput && graphqlInput.id),
-    playlists: graphqlInput => library.getPlaylists(() => {}),
-    createPlaylist: graphqlInput => {
-        let result = null;
-        library.savePlaylist(null, graphqlInput.name, graphqlInput.songs, (error, id) => {
-            result = {id}
-        });
-        return result
-    },
-    deletePlaylist: graphqlInput => {
-        library.deletePlaylist(graphqlInput.id);
-        return {id: graphqlInput.id}
+    library: async graphqlInput => await songRepository.findOne({id: graphqlInput && graphqlInput.id}),
+    libraries: async () => await songRepository.findAll(),
+    playlist: async graphqlInput => await playlistRepository.findOne({id: graphqlInput && graphqlInput.id}),
+    playlists: async () => await playlistRepository.findAll(),
+    createPlaylist: graphqlInput => {},
+    deletePlaylist: graphqlInput => {[]
     }
 };
 
