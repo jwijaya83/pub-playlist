@@ -10,6 +10,7 @@
   display: inline-block;
   transition: color 0.1s ease-out;
   position: relative;
+  height: 25px;
 }
 
 .link:hover {
@@ -20,15 +21,7 @@
   margin-left: 20px;
 }
 
-.link.active:before {
-  content: '';
-  display: block;
-  width: 7px;
-  height: 7px;
-  border-radius: 50%;
-  background: #FCDB06;
-  position: absolute;
-  left: -12px;
-  top: 8px;
+.link.active {
+  border-bottom: 2px solid #FCDB06;
 }
 

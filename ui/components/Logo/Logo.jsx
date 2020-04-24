@@ -1,6 +1,7 @@
 import React from 'react'
+import { Link } from 'react-router-dom'
 import './Logo.css'
 
 export const Logo = () => (
-  <a href="/" className="Logo">&nbsp;</a>
+  <Link to="/" className="Logo"></Link>
 )

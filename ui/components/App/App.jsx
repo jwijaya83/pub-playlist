@@ -1,15 +1,16 @@
 import React from "react";
+import { BrowserRouter as Router } from "react-router-dom";
 import "normalize.css/normalize.css";
 import "./App.css";
-import { AlbumList } from "../AlbumList/AlbumList";
 import { Header } from "../Header/Header";
+import { Routes } from "../Routes/Routes";
 
 function App() {
   return (
-    <>
+    <Router>
       <Header />
-      <AlbumList />
-    </>
+      <Routes />
+    </Router>
   );
 }
 
