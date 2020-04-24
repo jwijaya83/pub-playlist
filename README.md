@@ -6,15 +6,28 @@ The next level playlist experience
 
 ### Server
 
-TBD
+`npm run start:server`
 
 ### UI
 
-Install dependencies
+Install dependencies:
 `npm install`
 
-Start dev server
+Build UI:
+`npm run build:ui`
+
+Start dev server:
 `npm run start:ui`
 
-Build UI
-`npm run build:ui`
+### Tests
+Install Python v3.7.*
+
+Install dependencies:
+`pip install -r requirements.txt`
+
+Run Server and WebUI as described above
+
+Run tests from `tests\` directory:  
+`pytest` for running all tests  
+`pytest <tests_filename>.py` for running specific tests.
+
