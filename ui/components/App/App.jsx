@@ -2,12 +2,12 @@ import React from "react";
 import "normalize.css/normalize.css";
 import "./App.css";
 import { AlbumList } from "../AlbumList/AlbumList";
-import { Logo } from "../Logo/Logo";
+import { Header } from "../Header/Header";
 
 function App() {
   return (
     <>
-      <Logo />
+      <Header />
       <AlbumList />
     </>
   );

@@ -12,8 +12,8 @@ export const Album = ({ name, tracks, index }) => {
     <div className="Album" id={"album-" + tracks[0].id}>
       <div className="cover" style={coverStyle}>
         <div className="tracks">
-          {tracks.map((track) => (
-            <Track track={track} />
+          {tracks.map((track, index) => (
+            <Track track={track} index={index} key={track.id} />
           ))}
         </div>
       </div>
