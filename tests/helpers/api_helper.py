@@ -3,7 +3,7 @@ import requests
 
 class ApiHelper:
     def __init__(self, url: str):
-        self.graphql_url = url
+        self.graphql_url = '{}/graphql'.format(url)
 
     def send_query_request(self, schema: str, values: list, **kwargs):
         resp = requests.post(url=self.graphql_url, json={'query': self.__query_builder(schema, values)})
