@@ -24,9 +24,17 @@ class DBCommunicator:
         return [el.name for el in self.__cursor.description]
 
     def get_playlists_list(self):
-        self.__cursor.execute("SELECT * FROM playlists;")
+        self.__cursor.execute("SELECT * FROM playlists ORDER BY id ASC;")
         return self.__cursor.fetchall()
 
     def get_playlists_table_columns_names(self):
         self.__cursor.execute("SELECT * FROM playlists;")
+        return [el.name for el in self.__cursor.description]
+
+    def get_all_songs_in_playlists(self):
+        self.__cursor.execute("SELECT * FROM songs_in_playlist;")
+        return self.__cursor.fetchall()
+
+    def get_all_songs_in_playlists_columns_names(self):
+        self.__cursor.execute("SELECT * FROM songs_in_playlist;")
         return [el.name for el in self.__cursor.description]
