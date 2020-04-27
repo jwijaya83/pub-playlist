@@ -12,8 +12,9 @@ const schema = buildSchema(`
         playlists: [Playlist]
     }
     type Mutation {
-        createPlaylist(name: String!, songs: [Int]): Playlist,
-        deletePlaylist(id: Int!): Playlist
+        createPlaylist(name: String!, songs: [Int]): PlaylistResponse,
+        editPlaylist(id: Int!, name: String, songs: [Int]): PlaylistResponse,
+        deletePlaylist(id: Int!): PlaylistResponse
     }
     type Song {
         id: Int!,
@@ -27,15 +28,21 @@ const schema = buildSchema(`
         name: String!,
         songs: [Song]
     }
+    type PlaylistResponse {
+        id: Int!
+    }
 `);
 
 const rootResolver = {
-    library: async graphqlInput => await songRepository.findOne({id: graphqlInput && graphqlInput.id}),
-    libraries: async () => await songRepository.findAll(),
-    playlist: async graphqlInput => await playlistRepository.findOne({id: graphqlInput && graphqlInput.id}),
+    library: async req => await songRepository.findOne({id: req && req.id}),
+    libraries: async () => await songRepository.findAll({}),
+    playlist: async req => await playlistRepository.findOne({id: req && req.id}),
     playlists: async () => await playlistRepository.findAll(),
-    createPlaylist: graphqlInput => {},
-    deletePlaylist: graphqlInput => {[]
+    createPlaylist: async req => await playlistRepository.create(req && {name: req.name, songs: req.songs}),
+    editPlaylist: async req => await playlistRepository.edit(req && {id: req.id, name: req.name, songs: req.songs}),
+    deletePlaylist: async req => {
+        await playlistRepository.delete(req && {id: req.id});
+        return {id: req.id};
     }
 };
 

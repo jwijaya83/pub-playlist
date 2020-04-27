@@ -12,7 +12,11 @@ const db = {};
 
 db.Sequelize = sequelize;
 db.sequelize = sequelize;
+
 db.playlist = require("./playlist")(sequelize, Sequelize);
 db.song = require("./song")(sequelize, Sequelize);
+
+db.playlist.belongsToMany(db.song, {as: 'songs', through: 'songs_in_playlist', foreignKey: 'playlist_id', otherKey: 'song_id'});
+db.song.belongsToMany(db.playlist, {as: 'playlists', through: 'songs_in_playlist', foreignKey: 'song_id', otherKey: 'playlist_id'});
 
 module.exports = db;
