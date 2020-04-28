@@ -18,9 +18,9 @@ def api_communicator(request):
 @pytest.fixture(scope='class')
 def expectations():
     db_communicator = DBCommunicator()
-    return PlaylistExpectations([e[:5] for e in db_communicator.get_songs_list()],
+    return PlaylistExpectations(db_communicator.get_songs_list(),
                                 db_communicator.get_songs_table_columns_names()[:5],
                                 db_communicator.get_playlists_list(),
-                                db_communicator.get_playlists_table_columns_names(),
+                                db_communicator.get_playlists_table_columns_names()[:2],
                                 db_communicator.get_all_songs_in_playlists(),
-                                db_communicator.get_all_songs_in_playlists_columns_names())
+                                db_communicator.get_all_songs_in_playlists_columns_names()[2:])

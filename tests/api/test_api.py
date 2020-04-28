@@ -1,6 +1,6 @@
 import pytest
 from random import randint
-import tests.helpers.data_generator as dg
+from tests.helpers.data_generator import DataGenerator as dg
 from time import sleep
 
 
@@ -191,7 +191,165 @@ class TestAPI:
             values=['id'],
             code=200)
         assert response['data']['createPlaylist'] is not None
-        sleep(0.2)
+        sleep(0.3)
         expectations.update_playlists_df()
         assert count_of_playlists + 1 == expectations.get_playlists_count()
         assert count_of_songs_in_playlists + count_of_songs == expectations.get_count_of_songs_in_playlists()
+
+    @pytest.mark.api
+    def test_change_playlist_name_to_new_name(self, api_communicator, expectations):
+        expectations.update_playlists_df()
+        count_of_playlists = expectations.get_playlists_count()
+        id_playlist_for_change = randint(1, count_of_playlists)
+        new_name = dg.generate_random_name(8)
+
+        response = api_communicator.send_mutation_request(
+            func='editPlaylist(id: {}, name: "{}")'.format(id_playlist_for_change, new_name),
+            values=['id'],
+            code=200)
+        assert response['data']['editPlaylist'] is not None
+        expectations.update_playlists_df()
+        assert count_of_playlists == expectations.get_playlists_count()
+        assert expectations.get_playlist_name_by_id(id_playlist_for_change) == new_name
+
+    @pytest.mark.api
+    def test_change_playlist_name_to_the_same_name(self, api_communicator, expectations):
+        expectations.update_playlists_df()
+        count_of_playlists = expectations.get_playlists_count()
+        id_playlist_for_change = randint(1, count_of_playlists)
+        name = expectations.get_playlist_name_by_id(id_playlist_for_change)
+
+        response = api_communicator.send_mutation_request(
+            func='editPlaylist(id: {}, name: "{}")'.format(id_playlist_for_change, name),
+            values=['id'],
+            code=200)
+        assert response['data']['editPlaylist'] is not None
+        expectations.update_playlists_df()
+        assert count_of_playlists == expectations.get_playlists_count()
+        assert expectations.get_playlist_name_by_id(id_playlist_for_change) == name
+
+    @pytest.mark.api
+    def test_change_playlist_name_to_the_empty_name(self, api_communicator, expectations):
+        expectations.update_playlists_df()
+        count_of_playlists = expectations.get_playlists_count()
+        id_playlist_for_change = randint(1, count_of_playlists)
+        name = expectations.get_playlist_name_by_id(id_playlist_for_change)
+
+        response = api_communicator.send_mutation_request(
+            func='editPlaylist(id: {}, name: "")'.format(id_playlist_for_change),
+            values=['id'],
+            code=400)
+        assert response['data']['editPlaylist'] is not None
+        expectations.update_playlists_df()
+        assert count_of_playlists == expectations.get_playlists_count()
+        assert expectations.get_playlist_name_by_id(id_playlist_for_change) == name
+
+    @pytest.mark.api
+    def test_add_correct_song_to_playlist(self, api_communicator, expectations):
+        expectations.update_playlists_df()
+        count_of_playlists = expectations.get_playlists_count()
+        playlists_with_songs = expectations.get_playlists_with_songs(not_full=True)
+        id_playlist_for_change = playlists_with_songs[randint(0, len(playlists_with_songs) - 1)]
+        songs = expectations.get_songs_from_playlist_by_id(id_playlist_for_change)
+        songs_for_update = sorted(dg.add_random_songs_to_list(randint(1, 4), songs, expectations.get_songs_count()))
+
+        response = api_communicator.send_mutation_request(
+            func='editPlaylist(id: {}, songs: {})'.format(id_playlist_for_change, songs_for_update),
+            values=['id'],
+            code=200)
+        assert response['data']['editPlaylist'] is not None
+        sleep(0.3)
+        expectations.update_playlists_df()
+        assert count_of_playlists == expectations.get_playlists_count()
+        assert sorted(list(expectations.get_songs_from_playlist_by_id(id_playlist_for_change))) == songs_for_update
+
+    @pytest.mark.api
+    def test_add_incorrect_song_to_playlist(self, api_communicator, expectations):
+        expectations.update_playlists_df()
+        count_of_playlists = expectations.get_playlists_count()
+        playlists_with_songs = expectations.get_playlists_with_songs(not_full=True)
+        id_playlist_for_change = playlists_with_songs[randint(0, len(playlists_with_songs) - 1)]
+        songs = list(expectations.get_songs_from_playlist_by_id(id_playlist_for_change))
+
+        response = api_communicator.send_mutation_request(
+            func='editPlaylist(id: {}, songs: {})'.format(id_playlist_for_change, songs + [randint(700, 1000)]),
+            values=['id'],
+            code=200)
+        assert response['data']['editPlaylist'] is not None
+        sleep(0.3)
+        expectations.update_playlists_df()
+        assert count_of_playlists == expectations.get_playlists_count()
+        assert sorted(list(expectations.get_songs_from_playlist_by_id(id_playlist_for_change))) == sorted(songs)
+
+    @pytest.mark.api
+    def test_remove_song_from_playlist(self, api_communicator, expectations):
+        expectations.update_playlists_df()
+        count_of_playlists = expectations.get_playlists_count()
+        playlists_with_songs = expectations.get_playlists_with_songs(not_full=False, not_one=True)
+        id_playlist_for_change = playlists_with_songs[randint(0, len(playlists_with_songs) - 1)]
+        songs = list(expectations.get_songs_from_playlist_by_id(id_playlist_for_change))
+        songs_for_update = sorted(dg.remove_random_songs_from_list(songs))
+
+        response = api_communicator.send_mutation_request(
+            func='editPlaylist(id: {}, songs: {})'.format(id_playlist_for_change, songs_for_update),
+            values=['id'],
+            code=200)
+        assert response['data']['editPlaylist'] is not None
+        sleep(0.3)
+        expectations.update_playlists_df()
+        assert count_of_playlists == expectations.get_playlists_count()
+        assert sorted(list(expectations.get_songs_from_playlist_by_id(id_playlist_for_change))) == songs_for_update
+
+    @pytest.mark.api
+    def test_no_changes_in_playlist(self, api_communicator, expectations):
+        expectations.update_playlists_df()
+        count_of_playlists = expectations.get_playlists_count()
+        playlists_with_songs = expectations.get_playlists_with_songs(not_full=False)
+        id_playlist_for_change = playlists_with_songs[randint(0, len(playlists_with_songs) - 1)]
+        songs = list(expectations.get_songs_from_playlist_by_id(id_playlist_for_change))
+
+        response = api_communicator.send_mutation_request(
+            func='editPlaylist(id: {}, songs: {})'.format(id_playlist_for_change, songs),
+            values=['id'],
+            code=200)
+        assert response['data']['editPlaylist'] is not None
+        sleep(0.3)
+        expectations.update_playlists_df()
+        assert count_of_playlists == expectations.get_playlists_count()
+        assert sorted(list(expectations.get_songs_from_playlist_by_id(id_playlist_for_change))) == sorted(songs)
+
+    @pytest.mark.api
+    def test_add_all_songs_playlist(self, api_communicator, expectations):
+        expectations.update_playlists_df()
+        count_of_playlists = expectations.get_playlists_count()
+        playlists_with_songs = expectations.get_playlists_with_songs(not_full=True)
+        id_playlist_for_change = playlists_with_songs[randint(0, len(playlists_with_songs) - 1)]
+        songs = [x for x in range(1, expectations.get_songs_count() + 1)]
+
+        response = api_communicator.send_mutation_request(
+            func='editPlaylist(id: {}, songs: {})'.format(id_playlist_for_change, songs),
+            values=['id'],
+            code=200)
+        assert response['data']['editPlaylist'] is not None
+        sleep(0.3)
+        expectations.update_playlists_df()
+        assert count_of_playlists == expectations.get_playlists_count()
+        assert sorted(list(expectations.get_songs_from_playlist_by_id(id_playlist_for_change))) == sorted(songs)
+
+    @pytest.mark.api
+    def test_add_song_to_full_playlist(self, api_communicator, expectations):
+        expectations.update_playlists_df()
+        count_of_playlists = expectations.get_playlists_count()
+        playlists_with_songs = expectations.get_playlists_with_songs(not_full=False, only_full=True)
+        id_playlist_for_change = playlists_with_songs[randint(0, len(playlists_with_songs) - 1)]
+        songs = [randint(1, expectations.get_songs_count())]
+
+        response = api_communicator.send_mutation_request(
+            func='editPlaylist(id: {}, songs: {})'.format(id_playlist_for_change, songs),
+            values=['id'],
+            code=200)
+        assert response['data']['editPlaylist'] is not None
+        sleep(0.3)
+        expectations.update_playlists_df()
+        assert count_of_playlists == expectations.get_playlists_count()
+        assert sorted(list(expectations.get_songs_from_playlist_by_id(id_playlist_for_change))) == sorted(songs)
