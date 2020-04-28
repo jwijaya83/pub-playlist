@@ -20,6 +20,9 @@ class PlaylistExpectations:
     def get_playlists_count(self):
         return self.playlists_df['id'].count()
 
+    def get_highest_playlist_id(self):
+        return self.playlists_df['id'].values.max()
+
     def get_playlists_list(self):
         return self.playlists_df['id'].values
 
