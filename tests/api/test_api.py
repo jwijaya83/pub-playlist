@@ -353,3 +353,33 @@ class TestAPI:
         expectations.update_playlists_df()
         assert count_of_playlists == expectations.get_playlists_count()
         assert sorted(list(expectations.get_songs_from_playlist_by_id(id_playlist_for_change))) == sorted(songs)
+
+    @pytest.mark.api
+    def test_delete_correct_playlist(self, api_communicator, expectations):
+        expectations.update_playlists_df()
+        count_of_playlists = expectations.get_playlists_count()
+
+        response = api_communicator.send_mutation_request(
+            func='deletePlaylist(id: {})'.format(randint(1, count_of_playlists)),
+            values=['id'],
+            code=200)
+        assert response['data']['deletePlaylist'] is not None
+        sleep(0.3)
+        expectations.update_playlists_df()
+        assert count_of_playlists - 1 == expectations.get_playlists_count()
+        assert response['data']['deletePlaylist']['id'] not in expectations.get_playlists_list()
+        assert response['data']['deletePlaylist']['id'] not in expectations.get_playlists_with_songs(not_full=False)
+
+    @pytest.mark.api
+    def test_delete_incorrect_playlist(self, api_communicator, expectations):
+        expectations.update_playlists_df()
+        count_of_playlists = expectations.get_playlists_count()
+
+        response = api_communicator.send_mutation_request(
+            func='deletePlaylist(id: {})'.format(count_of_playlists + 1),
+            values=['id'],
+            code=200)
+        assert response['data']['deletePlaylist'] is not None
+        sleep(0.3)
+        expectations.update_playlists_df()
+        assert count_of_playlists == expectations.get_playlists_count()

@@ -20,6 +20,9 @@ class PlaylistExpectations:
     def get_playlists_count(self):
         return self.playlists_df['id'].count()
 
+    def get_playlists_list(self):
+        return self.playlists_df['id'].values
+
     def get_playlist_name_by_id(self, id):
         return self.playlists_df[self.playlists_df['id'] == id]['name'].values[0]
 
