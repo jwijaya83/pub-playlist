@@ -19,7 +19,7 @@ exports.create = (req) => {
         id: req.id,
         name: req.name
     };
-
+    //TODO: need to add transaction
     return Playlist.create(conditions)
         .then(playlist => {
             _setSongs({...req, playlist});
@@ -31,7 +31,7 @@ exports.edit = (req) => {
     const conditions = {
         name: req.name
     };
-
+    //TODO: need to add transaction
     return Playlist.update(conditions, {where: {id: req.id}})
         .then(data => {
             return exports.findOne({id: req.id});
@@ -46,7 +46,7 @@ exports.delete = (req) => {
         where: {
             id: req.id
         }
-    });
+    }).then(data => {return {id: req.id}});
 };
 
 const _conditionManyToMany = {

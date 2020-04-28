@@ -40,10 +40,7 @@ const rootResolver = {
     playlists: async () => await playlistRepository.findAll(),
     createPlaylist: async req => await playlistRepository.create(req && {name: req.name, songs: req.songs}),
     editPlaylist: async req => await playlistRepository.edit(req && {id: req.id, name: req.name, songs: req.songs}),
-    deletePlaylist: async req => {
-        await playlistRepository.delete(req && {id: req.id});
-        return {id: req.id};
-    }
+    deletePlaylist: async req => await playlistRepository.delete(req && {id: req.id})
 };
 
 const graphql = graphqlHTTP({
