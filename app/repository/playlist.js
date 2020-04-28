@@ -1,43 +1,51 @@
 const db = require("../models");
 const Playlist = db.playlist;
 const Song = db.song;
-const SongRepository = require('./song');
-const Op = db.Sequelize.Op;
 
-const _setSongs = (req) => {
+const _setSongs = async (req, t) => {
     if (req.songs !== undefined) {
-        SongRepository.findAll({
-            ids: req.songs
-        }).then(songs => {
-            req.playlist.setSongs(songs);
+        let songs = await Song.findAll({
+            where: {
+                id: req.songs
+            },
+            transaction: t
         });
+        await req.playlist.setSongs(songs, {transaction: t});
+        return {id: req.playlist.id}
     }
 };
 
-exports.create = (req) => {
+exports.create = async (req) => {
     const conditions = {
         name: req.name
     };
-    //TODO: need to add transaction
-    return Playlist.create(conditions)
-        .then(playlist => {
-            _setSongs({...req, playlist});
-            return {id: playlist.id}
+    try {
+        return await db.Sequelize.transaction(async (t) => {
+            let playlist = await Playlist.create(conditions, {transaction: t});
+            return _setSongs({...req, playlist}, t);
         });
+    } catch (error) {
+        console.error(error);
+    }
 };
 
-exports.edit = (req) => {
+exports.edit = async (req) => {
     const conditions = {
         name: req.name
     };
-    //TODO: need to add transaction
-    return Playlist.update(conditions, {where: {id: req.id}})
-        .then(data => {
-            return exports.findOne({id: req.id});
-        }).then(playlist => {
-            _setSongs({...req, playlist});
-            return {id: playlist.id};
+    try {
+        return await db.Sequelize.transaction(async (t) => {
+            let result = await Playlist.update(conditions, {where: {id: req.id}, transaction: t});
+            if (result[0] > 0) {
+                let playlist = await Playlist.findOne({where: {id: req.id}, transaction: t});
+                return _setSongs({...req, playlist}, t);
+            } else {
+                throw new Error("Play list with id " + req.id + " has not been found");
+            }
         });
+    } catch (error) {
+        console.error(error);
+    }
 };
 
 exports.delete = (req) => {
@@ -45,24 +53,8 @@ exports.delete = (req) => {
         where: {
             id: req.id
         }
-    }).then(data => {return {id: req.id}});
+    }).then(data => {
+        return {id: req.id}
+    });
 };
 
-const _conditionManyToMany = {
-    include: [{
-        model: Song,
-        as: 'songs',
-        through: {
-            attributes: ['playlist_id', 'song_id']
-        }
-    }]
-};
-
-exports.findOne = (req) => {
-    const id = req.id;
-    return Playlist.findByPk(id, _conditionManyToMany);
-};
-
-exports.findAll = () => {
-    return Playlist.findAll(_conditionManyToMany);
-};
