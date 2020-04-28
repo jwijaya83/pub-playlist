@@ -3,7 +3,7 @@ const song = require('../repository/song');
 const playlist = require('../repository/playlist');
 const fs = require('fs');
 
-class Songs {
+class Import {
    constructor(dataPath) {
       this._dataPath = dataPath;
    }
@@ -60,5 +60,4 @@ class Songs {
    }
 }
 
-const songs = new Songs(path.join(__dirname, '..', '..', 'data'));
-songs.toDB();
+exports.Import = new Import(path.join(__dirname, '..', '..', 'data'));

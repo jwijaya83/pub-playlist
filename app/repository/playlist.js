@@ -16,7 +16,6 @@ const _setSongs = (req) => {
 
 exports.create = (req) => {
     const conditions = {
-        id: req.id,
         name: req.name
     };
     //TODO: need to add transaction
