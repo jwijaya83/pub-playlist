@@ -1,5 +1,6 @@
 const db = require("../models");
 const Song = db.song;
+const Op = require("sequelize").Op;
 
 exports.create = (req) => {
     const song = {
@@ -13,9 +14,18 @@ exports.create = (req) => {
     return Song.create(song);
 };
 
-exports.findAll = async (req, t) => {
-    return await Song.findAll({
-        where: {id: req.ids},
+exports.findAll = (req, t) => {
+    let condition = req.ids ? {id: req.ids} : null;
+    condition = req.search ? {
+        [Op.or]: {
+            title: { [Op.iLike]: `%${req.search}%` },
+            artist: { [Op.iLike]: `%${req.search}%` },
+            album: { [Op.iLike]: `%${req.search}%` }
+        }
+    } : condition;
+
+    return Song.findAll({
+        where: condition,
         transaction: t
     });
 };

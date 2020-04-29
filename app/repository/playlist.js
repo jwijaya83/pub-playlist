@@ -34,7 +34,7 @@ exports.edit = async (req) => {
     try {
         return await db.Sequelize.transaction(async (t) => {
             let result = await Playlist.update(conditions, {where: {id: req.id}, transaction: t});
-            if (result[0] > 0) {
+            if (result.length > 0) {
                 let playlist = await Playlist.findOne({where: {id: req.id}, transaction: t});
                 return _setSongs({...req, playlist}, t);
             } else {
