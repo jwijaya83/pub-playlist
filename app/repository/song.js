@@ -13,9 +13,12 @@ exports.create = (req) => {
     return Song.create(song);
 };
 
-exports.findAll = (req) => {
+exports.findAll = async (req, t) => {
     const condition = req.ids ? {id: req.ids} : null;
-    return Song.findAll({where: condition});
+    return await Song.findAll({
+        where: condition,
+        transaction: t
+    });
 };
 
 exports.findOne = (req) => {
@@ -23,10 +26,3 @@ exports.findOne = (req) => {
     return Song.findByPk(id);
 };
 
-exports.findAllTr = async (req, t) => {
-    const condition = req.ids ? {id: req.ids} : null;
-    return await Song.findAll({
-        where: condition,
-        transaction: t
-    });
-};

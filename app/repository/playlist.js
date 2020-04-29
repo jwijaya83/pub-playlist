@@ -5,7 +5,7 @@ const SongRepository = require('./song');
 
 const _setSongs = async (req, t) => {
     if (req.songs !== undefined) {
-        let songs = await SongRepository.findAllTr({ids: req.songs}, t);
+        let songs = await SongRepository.findAll({ids: req.songs}, t);
         await req.playlist.setSongs(songs, {transaction: t});
         return {id: req.playlist.id}
     }
