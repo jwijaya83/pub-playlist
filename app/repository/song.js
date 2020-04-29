@@ -1,6 +1,5 @@
 const db = require("../models");
 const Song = db.song;
-const Op = db.Sequelize.Op;
 
 exports.create = (req) => {
     const song = {
@@ -14,12 +13,16 @@ exports.create = (req) => {
     return Song.create(song);
 };
 
-exports.findAll = (req) => {
+exports.findAll = async (req, t) => {
     const condition = req.ids ? {id: req.ids} : null;
-    return Song.findAll({where: condition});
+    return await Song.findAll({
+        where: condition,
+        transaction: t
+    });
 };
 
 exports.findOne = (req) => {
     const id = req.id;
     return Song.findByPk(id);
 };
+

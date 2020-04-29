@@ -1,6 +1,5 @@
 const { buildSchema } = require('graphql');
 const graphqlHTTP = require('express-graphql');
-const path = require('path');
 const playlistRepository = require('../repository/playlist');
 const songRepository = require('../repository/song');
 
@@ -47,6 +46,6 @@ const graphql = graphqlHTTP({
     schema,
     rootValue: rootResolver,
     graphiql: true
-})
+});
 
 module.exports = graphql;
