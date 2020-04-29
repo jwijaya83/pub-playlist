@@ -22,6 +22,7 @@ exports.create = async (req) => {
         });
     } catch (error) {
         console.error(error);
+        throw error;
     }
 };
 
@@ -41,6 +42,7 @@ exports.edit = async (req) => {
         });
     } catch (error) {
         console.error(error);
+        throw error;
     }
 };
 
