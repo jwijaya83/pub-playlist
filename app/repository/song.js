@@ -18,9 +18,9 @@ exports.findAll = (req, t) => {
     let condition = req.ids ? {id: req.ids} : null;
     condition = req.search ? {
         [Op.or]: {
-            title: { [Op.iLike]: `%${req.search}%` },
-            artist: { [Op.iLike]: `%${req.search}%` },
-            album: { [Op.iLike]: `%${req.search}%` }
+            title: {[Op.iLike]: `%${req.search}%`},
+            artist: {[Op.iLike]: `%${req.search}%`},
+            album: {[Op.iLike]: `%${req.search}%`}
         }
     } : condition;
 
