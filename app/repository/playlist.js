@@ -1,15 +1,11 @@
 const db = require("../models");
 const Playlist = db.playlist;
 const Song = db.song;
+const SongRepository = require('./song');
 
 const _setSongs = async (req, t) => {
     if (req.songs !== undefined) {
-        let songs = await Song.findAll({
-            where: {
-                id: req.songs
-            },
-            transaction: t
-        });
+        let songs = await SongRepository.findAllTr({ids: req.songs}, t);
         await req.playlist.setSongs(songs, {transaction: t});
         return {id: req.playlist.id}
     }
@@ -54,7 +50,28 @@ exports.delete = (req) => {
             id: req.id
         }
     }).then(data => {
+        if (data > 0) {
+            console.log("Playlist id=" + req.id + " has been deleted");
+        }
         return {id: req.id}
     });
 };
 
+const _conditionManyToMany = {
+    include: [{
+        model: Song,
+        as: 'songs',
+        through: {
+            attributes: ['playlist_id', 'song_id']
+        }
+    }]
+};
+
+exports.findOne = (req) => {
+    const id = req.id;
+    return Playlist.findByPk(id, _conditionManyToMany);
+};
+
+exports.findAll = () => {
+    return Playlist.findAll(_conditionManyToMany);
+};
