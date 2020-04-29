@@ -17,6 +17,9 @@ class PlaylistExpectations:
     def get_song_by_id(self, id):
         return self.songs_df.iloc[id - 1]
 
+    def get_song_df_by_id(self, id):
+        return self.songs_df[self.songs_df['id'] == id]
+
     def get_playlists_count(self):
         return self.playlists_df['id'].count()
 
