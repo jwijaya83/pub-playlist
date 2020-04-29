@@ -20,6 +20,9 @@ class PlaylistExpectations:
     def get_playlists_count(self):
         return self.playlists_df['id'].count()
 
+    def get_albums_count(self):
+        return self.songs_df['album'].nunique()
+
     def get_highest_playlist_id(self):
         return self.playlists_df['id'].values.max()
 
@@ -71,6 +74,15 @@ class PlaylistExpectations:
 
     def get_count_of_songs_in_playlists(self):
         return self.songs_in_playlists_df['song_id'].count()
+
+    def get_list_of_artists(self):
+        return self.songs_df['artist'].unique()
+
+    def get_list_of_albums(self):
+        return self.songs_df['album'].unique()
+
+    def get_songs_in_album(self, album_name):
+        return self.songs_df[self.songs_df['album'] == album_name]['title'].values
 
     def update_playlists_df(self):
         db_communicator = DBCommunicator()
