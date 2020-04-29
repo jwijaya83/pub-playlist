@@ -217,7 +217,7 @@ class TestAPI:
         expectations.update_playlists_df()
         count_of_playlists = expectations.get_playlists_count()
         id_playlist_for_change = randint(1, count_of_playlists)
-        name = expectations.get_playlist_name_by_id(id_playlist_for_change)
+        name = expectations.get_playlist_name_by_iloc(id_playlist_for_change)
 
         response = api_communicator.send_mutation_request(
             func='editPlaylist(id: {}, name: "{}")'.format(id_playlist_for_change, name),

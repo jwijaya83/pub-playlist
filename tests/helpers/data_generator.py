@@ -29,7 +29,7 @@ class DataGenerator:
     def remove_random_songs_from_list(cls, songs_list):
         random.shuffle(songs_list)
         if len(songs_list) <= 3:
-            return songs_list[0]
+            return songs_list[:1]
         elif len(songs_list) <= 10:
             return songs_list[:random.randint(1, 3) * -1]
         return songs_list[:random.randint(5, 8) * -1]
