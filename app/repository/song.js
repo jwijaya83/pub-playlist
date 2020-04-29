@@ -14,9 +14,8 @@ exports.create = (req) => {
 };
 
 exports.findAll = async (req, t) => {
-    const condition = req.ids ? {id: req.ids} : null;
     return await Song.findAll({
-        where: condition,
+        where: {id: req.ids},
         transaction: t
     });
 };
