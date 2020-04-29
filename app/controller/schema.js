@@ -34,7 +34,7 @@ const schema = buildSchema(`
 
 const rootResolver = {
     library: async req => await songRepository.findOne({id: req && req.id}),
-    libraries: async () => await songRepository.findAll({}),
+    libraries: async () => await songRepository.fetchAll(),
     playlist: async req => await playlistRepository.findOne({id: req && req.id}),
     playlists: async () => await playlistRepository.findAll(),
     createPlaylist: async req => await playlistRepository.create(req && {name: req.name, songs: req.songs}),

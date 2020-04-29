@@ -20,6 +20,10 @@ exports.findAll = async (req, t) => {
     });
 };
 
+exports.fetchAll = () => {
+    return Song.findAll();
+};
+
 exports.findOne = (req) => {
     const id = req.id;
     return Song.findByPk(id);
