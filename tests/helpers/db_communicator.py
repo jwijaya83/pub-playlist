@@ -16,7 +16,7 @@ class DBCommunicator:
         self.__conn.close()
 
     def get_songs_list(self):
-        self.__cursor.execute("SELECT * FROM songs ORDER BY id ASC;")
+        self.__cursor.execute("SELECT id, album, duration, title, artist FROM songs ORDER BY id ASC;")
         return self.__cursor.fetchall()
 
     def get_songs_table_columns_names(self):
@@ -24,7 +24,7 @@ class DBCommunicator:
         return [el.name for el in self.__cursor.description]
 
     def get_playlists_list(self):
-        self.__cursor.execute("SELECT * FROM playlists ORDER BY id ASC;")
+        self.__cursor.execute("SELECT id, name FROM playlists ORDER BY id ASC;")
         return self.__cursor.fetchall()
 
     def get_playlists_table_columns_names(self):
@@ -32,7 +32,7 @@ class DBCommunicator:
         return [el.name for el in self.__cursor.description]
 
     def get_all_songs_in_playlists(self):
-        self.__cursor.execute("SELECT * FROM songs_in_playlist;")
+        self.__cursor.execute("SELECT playlist_id, song_id FROM songs_in_playlist;")
         return self.__cursor.fetchall()
 
     def get_all_songs_in_playlists_columns_names(self):
