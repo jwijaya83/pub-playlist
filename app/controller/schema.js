@@ -6,7 +6,7 @@ const songRepository = require('../repository/song');
 const schema = buildSchema(`
     type Query {
         library(id: Int): Song,
-        libraries: [Song],
+        libraries(search: String): [Song],
         playlist(id: Int!): Playlist,
         playlists: [Playlist]
     }
@@ -34,7 +34,7 @@ const schema = buildSchema(`
 
 const rootResolver = {
     library: async req => await songRepository.findOne({id: req && req.id}),
-    libraries: async () => await songRepository.findAll({}),
+    libraries: async req => await songRepository.findAll(req && {search: req.search}),
     playlist: async req => await playlistRepository.findOne({id: req && req.id}),
     playlists: async () => await playlistRepository.findAll(),
     createPlaylist: async req => await playlistRepository.create(req && {name: req.name, songs: req.songs}),

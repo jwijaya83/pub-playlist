@@ -6,7 +6,6 @@ export const Song = ({ song, index }) => {
     const songStyle = {
         backgroundImage: `url('/images/${song.artist}_${song.album}.jpg')`,
     };
-    console.log(songStyle);
 
     return (
         <div className="Song" id={"Song-" + song.id} >

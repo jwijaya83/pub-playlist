@@ -1,0 +1,18 @@
+.Search {
+    position: relative;
+    top: 1px;
+    display: flex;
+    align-items: center;
+}
+
+.Search .search-query {
+    width: 300px;
+    border-width: 0 0 1px 0;
+    color: #5c3551;
+    outline: none;
+    border-color: #777;
+    font-size: 18px;
+    box-shadow: none;
+    padding-top: 3px;
+    padding-bottom: 3px;
+}
