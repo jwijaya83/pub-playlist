@@ -3,12 +3,16 @@ import "./Song.css";
 import { Play } from "../Play/Play";
 
 export const Song = ({ song, index }) => {
-    const coverStyle = {
-        backgroundImage: `url(/images/cover-${(index % 4) + 1}.jpg)`,
+    const songStyle = {
+        backgroundImage: `url('/images/${song.artist}_${song.album}.jpg')`,
     };
+    console.log(songStyle);
 
     return (
-        <div className="Song" id={"Song-" + song.id}>
+        <div className="Song" id={"Song-" + song.id} >
+            <div className="song" style={songStyle}>
+
+            </div>
             <div className="name" title={song.title}>
                 {song.title}
             </div>

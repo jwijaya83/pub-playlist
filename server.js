@@ -30,6 +30,7 @@ const db = require("./app/models");
 db.sequelize.sync({ force: true }).then(() => {
     console.log("Drop and re-sync db.");
     Import.toDB();
+    // Import.loadPicturesForSong();
     console.log("Data library imported.");
 });
 

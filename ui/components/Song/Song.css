@@ -11,6 +11,11 @@
     outline: 2px solid #FCDB06;
 }
 
+.song {
+    height: 275px;
+    margin-bottom: 10px;
+}
+
 .name {
     font-size: 16px;
     font-weight: 500;
