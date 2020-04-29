@@ -49,6 +49,7 @@ export class Library extends Component {
               {data.libraries.map((song, index) => (
                   <div key={song.id}><Song song={song} index={index} /></div>
               ))}
+              {data.libraries.length === 0 && <NoResults message="Songs not found" />}
             </div>
           );
         }}
