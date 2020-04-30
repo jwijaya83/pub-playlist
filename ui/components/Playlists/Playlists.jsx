@@ -34,7 +34,7 @@ export class Playlists extends Component {
     topBar() {
         return (
             <TopBar title="My Playlists">
-                <NewPlaylist handlePlaylistsUpdating={() => {this.handlePlaylistsUpdating(); window.location.reload();}} />
+                <NewPlaylist handlePlaylistsUpdating={() => {this.handlePlaylistsUpdating();}} />
             </TopBar>
         )
     }
@@ -44,6 +44,7 @@ export class Playlists extends Component {
         this.setState({
             trigger: !trigger,
         });
+        window.location.reload();
     }
 
     render() {

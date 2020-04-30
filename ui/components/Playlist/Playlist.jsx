@@ -51,6 +51,7 @@ export class Playlist extends Component {
                                 id: this.state.playlist.id
                             }
                         });
+                        this.props.handlePlaylistsUpdating();
                     }} title="Delete playlist">
                     <span className="material-icons">delete</span>
                 </button>
@@ -81,7 +82,6 @@ export class Playlist extends Component {
                 }
             });
             this.props.handlePlaylistsUpdating();
-            window.location.reload();
             this.handleEditName(false);
         }
     };
