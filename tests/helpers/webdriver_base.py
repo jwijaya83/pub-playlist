@@ -459,3 +459,12 @@ class WebDriverBase:
         self.driver.close()
         self.driver.switch_to.window(self.driver.window_handles[0])
         return opened_url
+
+    def wait_for_element_not_presented_by_xpath(self, xpath):
+        finish = time.time() + 30
+        while time.time() <= finish and self.is_element_presented_by_xpath(xpath):
+            print("Element with xpath '{}' still visible. Try again in 1 second...".format(xpath))
+            time.sleep(1)
+        result = not self.is_element_presented_by_xpath(xpath)
+        if not result:
+            raise AssertionError('Element with xpath {} presented, but not expected'.format(xpath))
