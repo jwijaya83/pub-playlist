@@ -22,3 +22,6 @@ class AlbumsPage(TabsElements):
 
     def albums_page_header_presented_on_the_page(self):
         return self.is_text_presented_on_the_page(self.ALBUMS_HEADER_TEXT)
+
+    def wait_for_page_is_loaded(self):
+        self.wait_for_element_not_presented_by_xpath(self.LOADING_INSCRIPTION_XPATH)

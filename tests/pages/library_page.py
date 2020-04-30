@@ -2,7 +2,6 @@ from .tabs_elements import TabsElements
 
 
 class LibraryPage(TabsElements):
-    LOADING_INSCRIPTION_XPATH = "//*[text()='Loading...']"
     SEARCH_FORM_XPATH = "//input[@type='text']"
     LIBRARY_AREA_XPATH = "//*[@class='Library']"
     SONG_ELEMENT_XPATH_TEMPLATE = "//*[@id='Song-{}']"

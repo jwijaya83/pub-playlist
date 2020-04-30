@@ -9,16 +9,19 @@ class TestPlaylistifyUI:
     @pytest.mark.ui
     def test_albums_page_header_presented_on_the_page(self, wd):
         albums_page = AlbumsPage(wd)
+        albums_page.wait_for_page_is_loaded()
         assert albums_page.albums_page_header_presented_on_the_page()
 
     @pytest.mark.ui
     def test_count_of_playlists_on_the_page(self, expectations, wd):
         albums_page = AlbumsPage(wd)
+        albums_page.wait_for_page_is_loaded()
         assert albums_page.get_count_of_albums_on_the_page() == expectations.get_albums_count()
 
     @pytest.mark.ui
     def test_artists_names_on_the_page(self, expectations, wd):
         albums_page = AlbumsPage(wd)
+        albums_page.wait_for_page_is_loaded()
         artists_names = expectations.get_list_of_artists()
         for artist in artists_names:
             assert albums_page.artist_name_presented_on_the_page(artist)
@@ -26,6 +29,7 @@ class TestPlaylistifyUI:
     @pytest.mark.ui
     def test_albums_names_on_the_page(self, expectations, wd):
         albums_page = AlbumsPage(wd)
+        albums_page.wait_for_page_is_loaded()
         albums_names = expectations.get_list_of_albums()
         for album in albums_names:
             assert albums_page.artist_name_presented_on_the_page(album)
@@ -33,6 +37,7 @@ class TestPlaylistifyUI:
     @pytest.mark.ui
     def test_check_albums_content(self, expectations, wd):
         albums_page = AlbumsPage(wd)
+        albums_page.wait_for_page_is_loaded()
         albums_names = expectations.get_list_of_albums()
         result_dict = dict()
         for album in albums_names:
@@ -49,20 +54,20 @@ class TestPlaylistifyUI:
 
     def test_search_area_presented_on_the_page(self, wd):
         library_page = LibraryPage(wd)
-        library_page.click_on_library_tab()
         library_page.wait_for_page_is_loaded()
+        library_page.click_on_library_tab()
         assert library_page.search_form_presented_on_the_page()
 
     def test_count_of_songs_on_the_page(self, expectations, wd):
         library_page = LibraryPage(wd)
-        library_page.click_on_library_tab()
         library_page.wait_for_page_is_loaded()
+        library_page.click_on_library_tab()
         assert library_page.get_count_of_songs_on_the_page() == expectations.get_songs_count()
 
     def test_check_songs_info_on_the_page(self, expectations, wd):
         library_page = LibraryPage(wd)
-        library_page.click_on_library_tab()
         library_page.wait_for_page_is_loaded()
+        library_page.click_on_library_tab()
         result_dict = dict()
         for song_id in range(1, expectations.get_songs_count() + 1):
             song_df = expectations.get_song_df_by_id(song_id)
@@ -75,18 +80,30 @@ class TestPlaylistifyUI:
 
     def test_check_playlists_page_header(self, wd):
         playlists_page = PlaylistsPage(wd)
-        playlists_page.click_on_playlists_tab()
         playlists_page.wait_for_page_is_loaded()
+        playlists_page.click_on_playlists_tab()
         assert playlists_page.playlists_page_header_presented_on_the_page()
 
     def test_check_add_playlist_button(self, wd):
         playlists_page = PlaylistsPage(wd)
-        playlists_page.click_on_playlists_tab()
         playlists_page.wait_for_page_is_loaded()
+        playlists_page.click_on_playlists_tab()
         assert playlists_page.add_playlist_icon_presented_on_the_page()
 
     def test_check_count_of_playlists(self, expectations, wd):
         playlists_page = PlaylistsPage(wd)
-        playlists_page.click_on_playlists_tab()
         playlists_page.wait_for_page_is_loaded()
+        playlists_page.click_on_playlists_tab()
         assert playlists_page.get_count_of_playlists_on_the_page() == expectations.get_playlists_count()
+
+    def test_check_playlists_content(self, expectations, wd):
+        playlists_page = PlaylistsPage(wd)
+        playlists_page.wait_for_page_is_loaded()
+        playlists_page.click_on_playlists_tab()
+        res_dict = dict()
+        for playlist_id in expectations.get_playlists_list():
+            playlist = expectations.get_songs_in_playlist_by_playlist_id(playlist_id)
+            visible_playlist = playlists_page.get_playlist_name_by_id(playlist_id)
+            res_dict[playlist_id] = playlist['name'] == visible_playlist['name'] and \
+                                    sorted(playlist['songs']) == sorted(visible_playlist['songs'])
+        assert False not in res_dict.values(), 'Some of playlists not equal\n{}'.format(res_dict)

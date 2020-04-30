@@ -52,6 +52,12 @@ class WebDriverBase:
         assert self.is_element_presented_by_xpath(parent_el_xpath)
         return len(self.driver.find_elements_by_xpath('{}/{}'.format(parent_el_xpath, child_el_tag)))
 
+    def get_texts_of_child_items_for_parent_element_by_xpath(self, parent_el_xpath, child_el_xpath):
+        if self.get_count_of_child_items_for_parent_element_by_xpath(parent_el_xpath, 'div') != 0:
+            songs = self.driver.find_elements_by_xpath('{}{}'.format(parent_el_xpath, child_el_xpath))
+            return [song.get_attribute('title') for song in songs]
+        return []
+
     def js_mouse_hover(self, element):
         """
         Calls mouse hover event using Java Script

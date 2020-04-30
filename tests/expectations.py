@@ -87,6 +87,19 @@ class PlaylistExpectations:
     def get_songs_in_album(self, album_name):
         return self.songs_df[self.songs_df['album'] == album_name]['title'].values
 
+    def get_songs_in_playlist_by_playlist_id(self, playlist_id):
+        res_dict = dict()
+        pl_name = self.playlists_df[self.playlists_df['id'] == playlist_id]['name'].values[0]
+        songs_ids = self.songs_in_playlists_df[self.songs_in_playlists_df['playlist_id'] == playlist_id]['song_id'].values
+        res_dict['name'] = pl_name
+        if songs_ids.size == 0:
+            res_dict['songs'] = []
+            return res_dict
+        res_dict['songs'] = [
+            self.songs_df[self.songs_df['id'] == song_id]['title'].values[0] for song_id in songs_ids
+        ]
+        return res_dict
+
     def update_playlists_df(self):
         db_communicator = DBCommunicator()
         self.playlists_df = pd.DataFrame(data=db_communicator.get_playlists_list(),
