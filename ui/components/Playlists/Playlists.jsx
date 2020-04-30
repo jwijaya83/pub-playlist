@@ -31,29 +31,24 @@ export class Playlists extends Component {
         };
     }
 
-    topBar() {
+    topBar = (refetch) => {
         return (
             <TopBar title="My Playlists">
-                <NewPlaylist handlePlaylistsUpdating={() => {this.handlePlaylistsUpdating();}} />
+                <NewPlaylist handlePlaylistsUpdating={() => {this.handlePlaylistsUpdating(refetch)}} />
             </TopBar>
         )
     }
 
-    handlePlaylistsUpdating = (playlist) => {
+    handlePlaylistsUpdating = async (refetch) => {
         const { trigger } = this.state;
+        await refetch();
         this.setState({
             trigger: !trigger,
         });
-        window.location.reload();
     }
 
     render() {
         const { newTrackInPlaylist } = this.props;
-
-        let topBar;
-        if (!newTrackInPlaylist) {
-            topBar = this.topBar()
-        }
 
         return <Query query={GET_PLAYLISTS}>{({loading, error, data, refetch}) => {
 
@@ -62,12 +57,12 @@ export class Playlists extends Component {
             if (data.playlists.count === 0) return <NoResults
                 message="Fill free to create your personal playlists"/>;
             return <div className="playlistList">
-                {topBar}
+                {!newTrackInPlaylist && this.topBar(refetch)}
                 <div className="playlists">
                     {data.playlists.map((playlist, index) => (
                         <div key={index}>
                             <Playlist
-                                handlePlaylistsUpdating={this.handlePlaylistsUpdating}
+                                handlePlaylistsUpdating={() => {this.handlePlaylistsUpdating(refetch)}}
                                 newTrackInPlaylist={newTrackInPlaylist}
                                 playlist={playlist} index={index}/>
                         </div>)

@@ -71,6 +71,7 @@ export class Playlist extends Component {
         });
         playlist.songs.push(newTrackInPlaylist.track);
         newTrackInPlaylist.trackCallback();
+        this.props.handlePlaylistsUpdating();
     };
 
     editName = (e, playlist, editPlaylist) => {
