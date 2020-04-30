@@ -13,6 +13,14 @@ mutation EditPlaylist($id: Int!, $name: String, $songs: [Int]) {
 }
 `;
 
+const DELETE_PLAYLIST = gql`
+mutation DeletePlaylist($id: Int!) {
+    deletePlaylist(id: $id) {
+        id
+    }
+}    
+`;
+
 export class Playlist extends Component {
     constructor(props) {
         super();
@@ -23,13 +31,36 @@ export class Playlist extends Component {
     }
 
     actionDeleteFromPlaylist = (songId) => {
-        this.setState(prevState => ({playlist: {...prevState.playlist,
-             songs: this.state.playlist.songs.filter(song => song.id !== songId)}}));
+        this.setState(prevState => ({
+            playlist: {
+                ...prevState.playlist,
+                songs: this.state.playlist.songs.filter(song => song.id !== songId)
+            }
+        }));
         this.props.handlePlaylistsUpdating();
     };
 
+    deletePlaylistButton = () => {
+        return (
+            <Mutation mutation={DELETE_PLAYLIST}>{(deletePlaylist, { _ }) => (
+                <button type="button" className="delete-playlist"
+                    onClick={e => {
+                        e.preventDefault();
+                        deletePlaylist({
+                            variables: {
+                                id: this.state.playlist.id
+                            }
+                        });
+                    }} title="Delete playlist">
+                    <span className="material-icons">delete</span>
+                </button>
+            )
+            }</Mutation>
+        )
+    }
+
     createPlaylist = (playlist, editPlaylist) => {
-        const {newTrackInPlaylist} = this.props;
+        const { newTrackInPlaylist } = this.props;
         let prevSongs = playlist.songs.map(song => { return song.id });
         editPlaylist({
             variables: {
@@ -55,11 +86,11 @@ export class Playlist extends Component {
     };
 
     handleEditName = (status) => {
-        this.setState({isEditName: status});
+        this.setState({ isEditName: status });
     };
 
     changeName = (e) => {
-        this.setState({playlist: {...this.state.playlist, name: e.target.value}});
+        this.setState({ playlist: { ...this.state.playlist, name: e.target.value } });
     };
 
     render() {
@@ -78,7 +109,7 @@ export class Playlist extends Component {
                 return (
                     <Mutation mutation={ADD_SONG_TO_PLAYLIST}>{(editPlaylist, { _ }) => (
                         <button type="button" className="btn-icon add add-button"
-                                onClick={() => {this.createPlaylist(playlist, editPlaylist)}} title="Add">
+                            onClick={() => { this.createPlaylist(playlist, editPlaylist) }} title="Add">
                             <span className="material-icons add-button-icon">add</span>
                         </button>
                     )
@@ -93,8 +124,8 @@ export class Playlist extends Component {
                     {!isEditName && <div>{playlist.name}</div>}
                     {isEditName && !newTrackInPlaylist && <div className="edit-name">
                         <input value={playlist.name} autoFocus
-                               onChange={this.changeName}
-                               onKeyPress={(e) => this.editName(e, playlist, editPlaylist)}
+                            onChange={this.changeName}
+                            onKeyPress={(e) => this.editName(e, playlist, editPlaylist)}
                         />
                     </div>}
                     {!newTrackInPlaylist && <div className="edit"><span className="material-icons">edit</span></div>}
@@ -116,6 +147,7 @@ export class Playlist extends Component {
                 </div>
                 {editNamePlaylist()}
                 {play}
+                {this.deletePlaylistButton()}
             </div>
         );
     }
