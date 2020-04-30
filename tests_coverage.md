@@ -11,7 +11,7 @@
 #### Query Request ####
 :heavy_check_mark: Get all songs and compare with DB output  
 :heavy_check_mark: Get all playlists without song parameter and compare with DB output  
-:heavy_check_mark: Get all playlists with song parameter and compare with DB output
+:heavy_check_mark: Get all playlists with song parameter and compare with DB output  
 :heavy_check_mark: Check Playlists low boundary output and compare with DB output  
 :heavy_check_mark: Check Playlists out of low boundary output and compare with DB output  
 :heavy_check_mark: Check Playlists high boundary output and compare with DB output  
