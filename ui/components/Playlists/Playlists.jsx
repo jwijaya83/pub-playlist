@@ -63,7 +63,8 @@ export class Playlists extends Component {
             {topBar}
             <div className="playlists">
                 {playlists.map((playlist, index) => (
-                    <div key={index}><Playlist playlist={playlist} index={index}/></div>
+                    <div key={index}><Playlist newTrackInPlaylist={this.props.newTrackInPlaylist}
+                                               playlist={playlist} index={index}/></div>
                 ))}
             </div>
         </div>);
