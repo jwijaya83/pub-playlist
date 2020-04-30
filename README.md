@@ -34,7 +34,7 @@ npm run start:ui
 ```
 Served at http://localhost:4000/
 
-#### Manual tests
+#### Unit and Integration tests
 
 ```bash
 npm test
