@@ -7,6 +7,13 @@ from tests.pages.playlists_page import PlaylistsPage
 class TestPlaylistifyUI:
 
     @pytest.mark.ui
+    def test_pages_links_presented_on_the_page(self, wd):
+        albums_page = AlbumsPage(wd)
+        assert albums_page.albums_tab_presented_on_the_page()
+        assert albums_page.library_tab_presented_on_the_page()
+        assert albums_page.playlists_tab_presented_on_the_page()
+
+    @pytest.mark.ui
     def test_albums_page_header_presented_on_the_page(self, wd):
         albums_page = AlbumsPage(wd)
         albums_page.wait_for_page_is_loaded()

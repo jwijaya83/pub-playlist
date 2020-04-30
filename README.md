@@ -36,6 +36,8 @@ Served at http://localhost:4000/
 
 #### Automated tests
 Install Python v3.7.*  
+Download Chrome Driver from https://chromedriver.chromium.org/downloads  
+Extract Chrome Driver from archive to and folder from PATH variable  
 Install dependencies:  
 ```bash 
 pip install -r requirements.txt
@@ -75,7 +77,8 @@ pytest <tests_filename>.py
 _**To be done**_    
 DB constraints.  
 Server-side Batching & Caching via DataLoader.   
-Pagination. 
+Pagination.  
+Add auto downloading Browser drivers for UI tests.
 
 ## DB Schema
 ```sql

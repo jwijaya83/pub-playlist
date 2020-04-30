@@ -23,3 +23,12 @@ class TabsElements(WebDriverBase):
         self.wait_for_element_not_presented_by_xpath(self.LOADING_INSCRIPTION_XPATH)
         self.click_element_by_xpath(self.LIBRARY_TAB_XPATH)
         self.wait_for_element_not_presented_by_xpath(self.LOADING_INSCRIPTION_XPATH)
+
+    def albums_tab_presented_on_the_page(self):
+        return self.is_element_presented_by_xpath(self.ALBUMS_TAB_XPATH)
+
+    def playlists_tab_presented_on_the_page(self):
+        return self.is_element_presented_by_xpath(self.PLAYLISTS_TAB_XPATH)
+
+    def library_tab_presented_on_the_page(self):
+        return self.is_element_presented_by_xpath(self.LIBRARY_TAB_XPATH)
