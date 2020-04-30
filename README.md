@@ -24,6 +24,12 @@ npm run start:server
 ```
 Served at http://localhost:3000/
 
+#### Unit/Integration tests
+
+```bash
+npm test
+```
+
 #### UI
 
 Install dependencies, build UI and start dev server:
@@ -33,12 +39,6 @@ npm run build:ui
 npm run start:ui
 ```
 Served at http://localhost:4000/
-
-#### Unit and Integration tests
-
-```bash
-npm test
-```
 
 #### Automated tests
 Install Python v3.7.*  
@@ -78,13 +78,13 @@ pytest <tests_filename>.py
 2. GraphQL query, mutation, resolver.
 3. PostgeSQl as a data source.
 4. Sequelize ORM (transactions support)
-5. Mocha test framework
+5. Jest testing framework
 
 _**To be done**_    
 DB constraints.  
 Server-side Batching & Caching via DataLoader.   
 Pagination.  
-Add auto downloading Browser drivers for UI tests.
+Automated testing: auto downloading Browser drivers for UI tests.
 
 ## DB Schema
 ```sql
@@ -134,7 +134,7 @@ type Mutation {
 ```
 #### GraphQL API methods:
 
-_**GET libraries**_  
+_**Get libraries**_  
 ```js
 query {
   libraries {
@@ -166,7 +166,7 @@ Returns a JSON array of songs.
 }
 ```
 
-_**GET library by id**_
+_**Get library by id**_
 
 ```js
 query {
@@ -193,7 +193,7 @@ Returns a JSON object for a song with given `id`.
 }
 ```
 
-_**GET playlists**_
+_**Get playlists**_
 ```js
 query {
   playlists {
@@ -234,7 +234,7 @@ Returns a JSON array of playlists.
   }
 ```
 
-_**GET playlist by id**_
+_**Get playlist by id**_
 
 ```js
 query {
@@ -269,7 +269,7 @@ Returns a JSON object with the playlist with given `id`.
   }
 ```
 
-_**POST create playlist**_
+_**Create playlist**_
 ```js
 mutation {
   createPlaylist(name: "My New Playlist", 
@@ -290,7 +290,7 @@ Returns created playlis id.
 }
 ```
 
-_**POST edit playlist**_
+_**Edit playlist**_
 ```js
 mutation {
   editPlaylist(id: 9, name: "My New Playlist Updated", 
@@ -311,7 +311,7 @@ Returns updated playlis id.
 }
 ```
 
-_**POST delete playlist**_
+_**Delete playlist**_
 ```js
 mutation {
   deletePlaylist(id: 9) {
@@ -329,7 +329,7 @@ Returns deleted playlist id
 }
 ```
 
-_**GET search in library**_
+_**Search in library**_
 ```js
 query {
   libraries (search: "Time Stands Still") {
