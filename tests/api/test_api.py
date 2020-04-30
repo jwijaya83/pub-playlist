@@ -245,6 +245,23 @@ class TestAPI:
         assert expectations.get_playlist_name_by_id(id_playlist_for_change) == name
 
     @pytest.mark.api
+    def test_change_playlist_name_to_already_existing_name(self, api_communicator, expectations):
+        expectations.update_playlists_df()
+        count_of_playlists = expectations.get_playlists_count()
+        id_playlist_for_change = randint(1, count_of_playlists)
+        names = expectations.get_playlists_names(id_exclude=id_playlist_for_change)
+        name_for_change = names[randint(0, len(names) - 1)]
+
+        response = api_communicator.send_mutation_request(
+            func='editPlaylist(id: {}, name: "{}")'.format(id_playlist_for_change, name_for_change),
+            values=['id'],
+            code=400)
+        assert response['data']['editPlaylist'] is not None
+        expectations.update_playlists_df()
+        assert count_of_playlists == expectations.get_playlists_count()
+        assert expectations.get_playlist_name_by_id(id_playlist_for_change) == name
+
+    @pytest.mark.api
     def test_add_correct_song_to_playlist(self, api_communicator, expectations):
         expectations.update_playlists_df()
         count_of_playlists = expectations.get_playlists_count()

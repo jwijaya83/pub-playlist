@@ -3,7 +3,7 @@ from .tabs_elements import TabsElements
 
 class LibraryPage(TabsElements):
     SEARCH_FORM_XPATH = "//input[@type='text']"
-    LIBRARY_AREA_XPATH = "//*[@class='Library']"
+    LIBRARY_AREA_XPATH = "//*[@class='libraries']"
     SONG_ELEMENT_XPATH_TEMPLATE = "//*[@id='Song-{}']"
     SONG_NAME_XPATH_TEMPLATE = "//*[@id='Song-{}']//*[@class='name']"
     SONG_ARTIST_XPATH_TEMPLATE = "//*[@id='Song-{}']//*[@class='artist']"

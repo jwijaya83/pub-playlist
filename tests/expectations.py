@@ -38,6 +38,11 @@ class PlaylistExpectations:
     def get_playlist_name_by_iloc(self, iloc_id):
         return self.playlists_df.iloc[iloc_id-1]['name']
 
+    def get_playlists_names(self, id_exclude=None):
+        if id_exclude:
+            return self.playlists_df[self.playlists_df['id'] != id_exclude]['name'].values
+        return self.playlists_df['name'].values
+
     def get_songs_from_playlist_by_id(self, id):
         return self.songs_in_playlists_df[self.songs_in_playlists_df['playlist_id'] == id]['song_id'].values
 
