@@ -250,6 +250,7 @@ class TestAPI:
         count_of_playlists = expectations.get_playlists_count()
         id_playlist_for_change = randint(1, count_of_playlists)
         names = expectations.get_playlists_names(id_exclude=id_playlist_for_change)
+        current_name = expectations.get_playlist_name_by_id(id_playlist_for_change)
         name_for_change = names[randint(0, len(names) - 1)]
 
         response = api_communicator.send_mutation_request(
@@ -259,7 +260,7 @@ class TestAPI:
         assert response['data']['editPlaylist'] is not None
         expectations.update_playlists_df()
         assert count_of_playlists == expectations.get_playlists_count()
-        assert expectations.get_playlist_name_by_id(id_playlist_for_change) == name
+        assert expectations.get_playlist_name_by_id(id_playlist_for_change) == current_name
 
     @pytest.mark.api
     def test_add_correct_song_to_playlist(self, api_communicator, expectations):
