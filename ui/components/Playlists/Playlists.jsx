@@ -28,23 +28,28 @@ export class Playlists extends Component {
         super(props);
         this.handlePlaylistsUpdating = this.handlePlaylistsUpdating.bind(this);
         this.isNewPlaylistCreated = false
-        this.playlists = Array(0)
         this.state = {
-            trigger: false
+            trigger: false,
+            playlists: Array(0)
         };
+    }
+
+    actionDeletePlaylist = (playlistId) => {
+        this.setState({ playlists: this.state.playlists.filter(playlist => playlist.id != playlistId) });
+        this.forceUpdate();
     }
 
     topBar() {
         return (
             <TopBar title="My Playlists">
-                <NewPlaylist handlePlaylistsUpdating={this.handlePlaylistsUpdating}/>
+                <NewPlaylist handlePlaylistsUpdating={this.handlePlaylistsUpdating} />
             </TopBar>
         )
     }
 
     handlePlaylistsUpdating(playlist) {
         this.isNewPlaylistCreated = true
-        this.playlists.push(playlist);
+        this.state.playlists.push(playlist);
         this.forceUpdate()
     }
 
@@ -54,7 +59,7 @@ export class Playlists extends Component {
         }
     }
 
-    createPlaylists(playlists) {
+    createPlaylists() {
         let topBar;
         if (!this.props.newTrackInPlaylist) {
             topBar = this.topBar()
@@ -62,26 +67,27 @@ export class Playlists extends Component {
         return (<div className="playlistList">
             {topBar}
             <div className="playlists">
-                {playlists.map((playlist, index) => (
-                    <div key={index}><Playlist newTrackInPlaylist={this.props.newTrackInPlaylist}
-                                               playlist={playlist} index={index}/></div>
+                {this.state.playlists.map((playlist, index) => (
+                    <div key={index}><Playlist playlistsCallback={this.actionDeletePlaylist}
+                        newTrackInPlaylist={this.props.newTrackInPlaylist}
+                        playlist={playlist} index={index} /></div>
                 ))}
             </div>
         </div>);
     }
 
     render() {
-        return <Query query={GET_PLAYLISTS}>{({loading, error, data}) => {
-            if (loading) return <NoResults message="Loading..."/>;
+        return <Query query={GET_PLAYLISTS}>{({ loading, error, data }) => {
+            if (loading) return <NoResults message="Loading..." />;
             if (error) return <p>Error :(</p>;
             if (data.playlists.count === 0) return <NoResults
-                message="Fill free to create your personal playlists"/>;
+                message="Fill free to create your personal playlists" />;
 
             if (!this.isNewPlaylistCreated) {
-                this.playlists = Array(0).concat(data.playlists)
+                this.state.playlists = Array(0).concat(data.playlists)
             }
 
-            return this.createPlaylists(this.playlists);
+            return this.createPlaylists();
         }}
         </Query>;
     }
