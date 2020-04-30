@@ -24,19 +24,21 @@ export class Playlist extends Component {
 
     actionDeleteFromPlaylist = (songId) => {
         this.setState(prevState => ({playlist: {...prevState.playlist,
-             songs: this.state.playlist.songs.filter(song => song.id != songId)}}))
+             songs: this.state.playlist.songs.filter(song => song.id !== songId)}}));
+        this.props.handlePlaylistsUpdating();
     };
 
     createPlaylist = (playlist, editPlaylist) => {
+        const {newTrackInPlaylist} = this.props;
         let prevSongs = playlist.songs.map(song => { return song.id });
         editPlaylist({
             variables: {
                 id: playlist.id, name: playlist.name,
-                songs: [...prevSongs, this.props.newTrackInPlaylist.track.id]
+                songs: [...prevSongs, newTrackInPlaylist.track.id]
             }
         });
-        playlist.songs.push(this.props.newTrackInPlaylist.track);
-        this.props.newTrackInPlaylist.trackCallback();
+        playlist.songs.push(newTrackInPlaylist.track);
+        newTrackInPlaylist.trackCallback();
     };
 
     editName = (e, playlist, editPlaylist) => {
@@ -47,6 +49,7 @@ export class Playlist extends Component {
                     name: playlist.name
                 }
             });
+            this.props.handlePlaylistsUpdating();
             this.handleEditName(false);
         }
     };

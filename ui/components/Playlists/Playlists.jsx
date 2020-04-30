@@ -26,9 +26,6 @@ const GET_PLAYLISTS = gql`
 export class Playlists extends Component {
     constructor(props) {
         super(props);
-        this.handlePlaylistsUpdating = this.handlePlaylistsUpdating.bind(this);
-        this.isNewPlaylistCreated = false
-        this.playlists = Array(0)
         this.state = {
             trigger: false
         };
@@ -37,51 +34,48 @@ export class Playlists extends Component {
     topBar() {
         return (
             <TopBar title="My Playlists">
-                <NewPlaylist handlePlaylistsUpdating={this.handlePlaylistsUpdating}/>
+                <NewPlaylist handlePlaylistsUpdating={this.handlePlaylistsUpdating} />
             </TopBar>
         )
     }
 
-    handlePlaylistsUpdating(playlist) {
-        this.isNewPlaylistCreated = true
-        this.playlists.push(playlist);
-        this.forceUpdate()
-    }
-
-    componentDidMount() {
-        if (this.isNewPlaylistCreated) {
-            this.isNewPlaylistCreated = false
-        }
-    }
-
-    createPlaylists(playlists) {
-        let topBar;
-        if (!this.props.newTrackInPlaylist) {
-            topBar = this.topBar()
-        }
-        return (<div className="playlistList">
-            {topBar}
-            <div className="playlists">
-                {playlists.map((playlist, index) => (
-                    <div key={index}><Playlist newTrackInPlaylist={this.props.newTrackInPlaylist}
-                                               playlist={playlist} index={index}/></div>
-                ))}
-            </div>
-        </div>);
+    handlePlaylistsUpdating = (playlist) => {
+        const { trigger, refetch } = this.state;
+        this.setState({
+            trigger: !trigger,
+        });
+        refetch();
     }
 
     render() {
-        return <Query query={GET_PLAYLISTS}>{({loading, error, data}) => {
+        const { newTrackInPlaylist } = this.props;
+
+        let topBar;
+        if (!newTrackInPlaylist) {
+            topBar = this.topBar()
+        }
+
+        return <Query query={GET_PLAYLISTS}>{({loading, error, data, refetch}) => {
+            if (!this.state.refetch) {
+                this.setState({ refetch });
+            }
             if (loading) return <NoResults message="Loading..."/>;
             if (error) return <p>Error :(</p>;
             if (data.playlists.count === 0) return <NoResults
                 message="Fill free to create your personal playlists"/>;
-
-            if (!this.isNewPlaylistCreated) {
-                this.playlists = Array(0).concat(data.playlists)
-            }
-
-            return this.createPlaylists(this.playlists);
+            return <div className="playlistList">
+                {topBar}
+                <div className="playlists">
+                    {data.playlists.map((playlist, index) => (
+                        <div key={index}>
+                            <Playlist
+                                handlePlaylistsUpdating={this.handlePlaylistsUpdating}
+                                newTrackInPlaylist={newTrackInPlaylist}
+                                playlist={playlist} index={index}/>
+                        </div>)
+                    )}
+                </div>
+            </div>
         }}
         </Query>;
     }

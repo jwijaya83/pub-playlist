@@ -28,15 +28,6 @@ export class NewPlaylist extends Component {
         })
     }
 
-    handleNewPlaylistCreated(id, name) {
-        const playlist = {
-            id: id,
-            name: name,
-            songs: Array(0)
-        }
-        this.handlePlaylistsUpdating(playlist)
-    }
-
     handleCancelClick() {
         this.setState({
             isAdding: false,
@@ -57,7 +48,8 @@ export class NewPlaylist extends Component {
                         <button type="button" className="btn-icon create" title="Create Playlist" onClick={e => {
                             e.preventDefault();
                             createPlaylist({variables: {name: this.state.newPlaylistName}}).then(({data}) => {
-                                this.handleNewPlaylistCreated(data.createPlaylist.id, this.state.newPlaylistName)
+                                console.log("create playlist");
+                                this.handlePlaylistsUpdating()
                                 this.handleCancelClick()
                             });
                         }}>
