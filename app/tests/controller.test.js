@@ -20,7 +20,7 @@ describe('Playlist API test', function () {
         contentType: 'application/json'
     });
 
-    beforeAll(() =>{
+    beforeAll(() => {
         console.log("\x1B[31mPlease make sure server is running on " + config.APP_PORT + " port\x1B[0m");
     });
 
@@ -85,6 +85,7 @@ describe('Playlist API test', function () {
                 done();
             })
             .catch(err => {
+                console.error(err);
                 expect(err).toBe(null);
                 done();
             });
@@ -170,8 +171,167 @@ describe('Playlist API test', function () {
                 done();
             })
             .catch(err => {
+                console.error(err);
                 expect(err).toBe(null);
                 done();
             });
     });
+
+    // A song by id
+    test('query "get a song by id", should return one song', done => {
+        const songId = 1;
+        const schema = {
+            properties: {
+                library: {
+                    type: "object",
+                    properties: {
+                        id: {
+                            type: "integer"
+                        },
+                        title: {
+                            type: "string"
+                        },
+                        artist: {
+                            type: "string"
+                        },
+                        duration: {
+                            type: "integer"
+                        },
+                        album: {
+                            type: "string"
+                        }
+                    },
+                    required: [
+                        "id",
+                        "title",
+                        "artist",
+                        "duration",
+                        "album"
+                    ]
+                }
+            },
+            required: [
+                "library"
+            ]
+        };
+
+        self
+            .test(
+                JSON.stringify({
+                    query: `query {
+                              library(id: ${songId}) {
+                                id,
+                                title,
+                                 artist,
+                                 duration,
+                                 album
+                              }
+                            }`,
+                }),
+                {jar: true} // using my fork shalkam/graphql-tester to be able to add this option to the node request
+            )
+            .then(res => {
+                self.song = res.data.library;
+                expect(res.status).toBe(200);
+                expect(res.success).toBe(true);
+                expect(self.song.id).toEqual(songId);
+                expect(res.data).toMatchSchema(schema);
+                done();
+            })
+            .catch(err => {
+                console.error(err);
+                expect(err).toBe(null);
+                done();
+            });
+    });
+
+    // A playlist by id
+    test('query "get a playlist by id", should return one playlist', done => {
+        const playlistId = 1;
+        const schema = {
+            properties: {
+                playlist: {
+                    "type": "object",
+                    properties: {
+                        id: {
+                            "type": "integer"
+                        },
+                        name: {
+                            "type": "string"
+                        },
+                        songs: {
+                            type: "array",
+                            items: [
+                                {
+                                    "type": "object",
+                                    properties: {
+                                        id: {
+                                            type: "integer"
+                                        },
+                                        artist: {
+                                            type: "string"
+                                        },
+                                        duration: {
+                                            type: "integer"
+                                        },
+                                        title: {
+                                            type: "string"
+                                        }
+                                    },
+                                    required: [
+                                        "id",
+                                        "artist",
+                                        "duration",
+                                        "title"
+                                    ]
+                                }
+                            ]
+                        }
+                    },
+                    required: [
+                        "id",
+                        "name",
+                        "songs"
+                    ]
+                }
+            },
+            required: [
+                "playlist"
+            ]
+        };
+
+        self
+            .test(
+                JSON.stringify({
+                    query: `query {
+                              playlist(id: ${playlistId}) {
+                                id,
+                                name,
+                                songs {
+                                  id,
+                                  artist,
+                                  duration,
+                                  title
+                                }
+                            name
+                              }
+                            }`,
+                }),
+                {jar: true} // using my fork shalkam/graphql-tester to be able to add this option to the node request
+            )
+            .then(res => {
+                self.playlist = res.data.playlist;
+                expect(res.status).toBe(200);
+                expect(res.success).toBe(true);
+                expect(self.playlist.id).toEqual(playlistId);
+                expect(res.data).toMatchSchema(schema);
+                done();
+            })
+            .catch(err => {
+                console.error(err);
+                expect(err).toBe(null);
+                done();
+            });
+    });
+
 });
