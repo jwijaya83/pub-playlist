@@ -42,7 +42,3 @@
 .add-button {
     top: 72px;
 }
-
-.add-button:active {
-    display: none;
-}

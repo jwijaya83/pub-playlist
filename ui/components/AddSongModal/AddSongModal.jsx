@@ -4,6 +4,7 @@ import {Playlists} from "../Playlists/Playlists";
 import Modal from "react-modal";
 
 export const AddSongModal = ({newTrackInPlaylist, isShow, closePlaylist}) => {
+    Modal.setAppElement('body');
     return <Modal
         isOpen={isShow}>
         <button type="button" className="btn-icon close close-button" onClick={closePlaylist} title="Close">
