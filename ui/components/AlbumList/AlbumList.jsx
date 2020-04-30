@@ -1,34 +1,38 @@
 import React from 'react'
 import './AlbumList.css'
-import tracks from '../../assets/data/library.json'
-import { shuffle } from '../../lib/shuffle'
 import { Album } from '../Album/Album'
 import { TopBar } from '../TopBar/TopBar'
+import gql from "graphql-tag";
+import {NoResults} from "../NoResults/NoResults";
+import {Query} from "react-apollo";
+import _ from "lodash";
 
-const albums = tracks.reduce((acc, track) => {
-  if (acc[track.album]) {
-    acc[track.album] = [
-      ...acc[track.album],
-      track,
-    ]
-  } else {
-    acc[track.album] = [track]
-  }
-  return acc
-}, {})
-const shuffledAlbums = shuffle(Object.keys(albums)).reduce((acc, albumName) => {
-  acc[albumName] = albums[albumName]
-  return acc
-}, {})
-shuffle(albums)
+const GET_SONGS = gql`
+            query {
+                libraries {
+                    id,
+                    title,
+                    album,
+                    artist
+                }
+            }
+        `
 
 export const AlbumList = () => (
   <div className="AlbumList">
     <TopBar title="Top Albums" />
-    <div className="albums">
-      {Object.keys(shuffledAlbums).map((albumName, index) => (
-        <div key={albumName}><Album name={albumName} tracks={albums[albumName]} index={index} /></div>
-      ))}
-    </div>
+      <Query query={GET_SONGS}>
+          {({ loading, error, data }) => {
+              if (loading) return <NoResults message="Loading..."/>;
+              if (error) return <p>Error :(</p>;
+              data = _.groupBy(data.libraries, item => item.album);
+
+              return <div className="albums">
+                  {_.map(data, (songs, album) => {
+                      return <div key={album}><Album name={album} tracks={songs} index={album} /></div>;
+                  })}
+              </div>;
+          }}
+      </Query>
   </div>
-)
+);
