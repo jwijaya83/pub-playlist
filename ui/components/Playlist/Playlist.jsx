@@ -22,6 +22,11 @@ export class Playlist extends Component {
         }
     }
 
+    actionDeleteFromPlaylist = (songId) => {
+        this.setState(prevState => ({playlist: {...prevState.playlist,
+             songs: this.state.playlist.songs.filter(song => song.id != songId)}}))
+    };
+
     createPlaylist = (playlist, editPlaylist) => {
         let prevSongs = playlist.songs.map(song => { return song.id });
         editPlaylist({
@@ -100,7 +105,7 @@ export class Playlist extends Component {
                     <div className="songs">
                         {addToPlaylistButton()}
                         {playlist.songs.map((song, index) => (
-                            <PlaylistTrack
+                            <PlaylistTrack playlist={playlist} playlistCallback={this.actionDeleteFromPlaylist}
                                 fromModal={fromModal}
                                 song={song} index={index} key={song.id} />
                         ))}

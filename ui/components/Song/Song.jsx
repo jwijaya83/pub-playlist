@@ -1,7 +1,7 @@
-import React, {useState} from "react";
+import React, { useState } from "react";
 import "./Song.css";
 import { Play } from "../Play/Play";
-import {AddSongModal} from "../AddSongModal/AddSongModal";
+import { AddSongModal } from "../AddSongModal/AddSongModal";
 
 export const Song = ({ song, index }) => {
     let [isShowModal, setShowModal] = useState(false);
@@ -17,13 +17,21 @@ export const Song = ({ song, index }) => {
         fromModal: true
     }
 
-    return (
-        <div className="Song" id={"Song-" + song.id} >
-            <div className="song songs" style={songStyle}>
+    const addSongToPlaylistButton = () => {
+        if (!isShowModal) {
+            return (
                 <button type="button" className="btn-icon add add-button" title="Add"
                     onClick={actionModalPlaylists}>
                     <span className="material-icons add-button-icon">add</span>
                 </button>
+            )
+        }
+    }
+
+    return (
+        <div className="Song" id={"Song-" + song.id} >
+            <div className="song songs" style={songStyle}>
+                {addSongToPlaylistButton()}
             </div>
             <div className="name" title={song.title}>
                 {song.title}
@@ -39,8 +47,8 @@ export const Song = ({ song, index }) => {
             </div>
             <Play />
             {isShowModal && <AddSongModal isShow={isShowModal}
-                          newTrackInPlaylist={newTrackInPlaylist}
-                          closePlaylist={actionModalPlaylists}
+                newTrackInPlaylist={newTrackInPlaylist}
+                closePlaylist={actionModalPlaylists}
             />}
         </div>
     );
