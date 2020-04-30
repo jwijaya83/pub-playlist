@@ -34,6 +34,12 @@ npm run start:ui
 ```
 Served at http://localhost:4000/
 
+#### Manual tests
+
+```bash
+npm test
+```
+
 #### Automated tests
 Install Python v3.7.*  
 Install dependencies:  

@@ -20,6 +20,10 @@ describe('Playlist API test', function () {
         contentType: 'application/json'
     });
 
+    beforeAll(() =>{
+        console.log("\x1B[31mPlease make sure server is running on " + config.APP_PORT + " port\x1B[0m");
+    });
+
     // Songs Api
     test('query "libraries", should return all songs', done => {
         const schema = {
