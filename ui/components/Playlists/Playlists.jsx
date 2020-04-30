@@ -45,6 +45,7 @@ export class Playlists extends Component {
         this.setState({
             trigger: !trigger,
         });
+        window.location.reload();
     }
 
     render() {
