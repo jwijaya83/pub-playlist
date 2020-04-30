@@ -332,5 +332,49 @@ query {
 }
 
 Returns search result.
-TODO
+{
+  "data": {
+    "libraries": [
+      {
+        "id": 3,
+        "title": "Time Stands Still",
+        "duration": 210,
+        "artist": "The All-American Rejects"
+      }
+    ]
+  }
+}
+```
+
+_**Error response example**_
+```js
+mutation {
+  editPlaylist(id: 999, name: "My New Playlist Updated", 
+    songs:  
+    [3,4]
+  ) {
+    id
+  }
+}
+
+Error response.
+{
+  "errors": [
+    {
+      "message": "Play list with id 999 has not been found",
+      "locations": [
+        {
+          "line": 2,
+          "column": 3
+        }
+      ],
+      "path": [
+        "editPlaylist"
+      ]
+    }
+  ],
+  "data": {
+    "editPlaylist": null
+  }
+}
 ```
