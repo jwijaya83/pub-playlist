@@ -5,10 +5,10 @@ const SongRepository = require('./song');
 
 const _setSongs = async (req, t) => {
     if (req.songs !== undefined) {
-        let songs = await SongRepository.findAll({ids: req.songs}, t);
+        let songs = (req.songs) ? await SongRepository.findAll({ids: req.songs}, t) : [];
         await req.playlist.setSongs(songs, {transaction: t});
-        return {id: req.playlist.id}
     }
+    return {id: req.playlist.id}
 };
 
 exports.create = async (req) => {
@@ -32,9 +32,9 @@ exports.edit = async (req) => {
     };
     try {
         return await db.Sequelize.transaction(async (t) => {
-            let result = await Playlist.update(conditions, {where: {id: req.id}, transaction: t});
-            if (result[0] > 0) {
-                let playlist = await Playlist.findOne({where: {id: req.id}, transaction: t});
+            let playlist = await Playlist.findOne({where: {id: req.id}, transaction: t});
+            if (playlist) {
+                await Playlist.update(conditions, {where: {id: req.id}, transaction: t});
                 return _setSongs({...req, playlist}, t);
             } else {
                 throw new Error("Play list with id " + req.id + " has not been found");

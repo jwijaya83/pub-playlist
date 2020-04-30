@@ -48,6 +48,7 @@ class Import {
       return playlists;
    };
 
+   // Load playlists from fs and store to DB
    toDB = async () => {
       const data = this.getLibrary();
       await data.forEach(item => {

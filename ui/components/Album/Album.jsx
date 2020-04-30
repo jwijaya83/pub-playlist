@@ -4,11 +4,11 @@ import { Track } from "../Track/Track";
 import { Play } from "../Play/Play";
 
 export const Album = ({ name, tracks, index }) => {
-  const coverStyle = {
-    backgroundImage: `url(/images/cover-${(index % 4) + 1}.jpg)`,
-  };
+    const coverStyle = {
+        backgroundImage: `url('/images/${tracks[0].artist}_${tracks[0].album}.jpg')`,
+    };
 
-  return (
+    return (
     <div className="Album" id={"album-" + tracks[0].id}>
       <div className="cover" style={coverStyle}>
         <div className="tracks">
@@ -25,5 +25,5 @@ export const Album = ({ name, tracks, index }) => {
       </div>
       <Play />
     </div>
-  );
+    );
 };
