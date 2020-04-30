@@ -1,7 +1,6 @@
 import React, { Component } from "react";
 import './Track.css';
-import Modal from 'react-modal';
-import { Playlists } from "../Playlists/Playlists";
+import {AddSongModal} from "../AddSongModal/AddSongModal";
 
 export class Track extends Component {
 
@@ -10,22 +9,17 @@ export class Track extends Component {
     this.state = {
       isModalShown: false
     };
-    this.trackCallback = this.hidePlaylists.bind(this);
   }
 
-  showPlaylists() {
-    this.setState({ isModalShown: true });
-  }
-
-  hidePlaylists() {
-    this.setState({ isModalShown: false });
+  actionModalPlaylists = () => {
+    this.setState({ isModalShown: !this.state.isModalShown });
   }
 
   render() {
     const { track } = this.props;
     let newTrackInPlaylist = {
       track: track,
-      trackCallback: this.trackCallback,
+      trackCallback: this.actionModalPlaylists,
       fromModal: true
     }
     return (
@@ -35,16 +29,12 @@ export class Track extends Component {
           {track.title}
         </div>
         <button type="button" className="add-to-playlist" title="Add to Playlist">
-          <span className="material-icons" onClick={() => this.showPlaylists()}>add</span>
+          <span className="material-icons" onClick={this.actionModalPlaylists}>add</span>
         </button>
-        <Modal
-          isOpen={this.state.isModalShown}>
-          <button type="button" className="btn-icon close close-button" onClick={() => this.hidePlaylists()} title="Close">
-            <span className="material-icons">close</span>
-          </button>
-          <div className="gap"></div>
-          <Playlists newTrackInPlaylist={newTrackInPlaylist} />
-        </Modal>
+        <AddSongModal isShow={this.state.isModalShown}
+                      newTrackInPlaylist={newTrackInPlaylist}
+                      closePlaylist={this.actionModalPlaylists}
+        />
       </div>
     )
   }
