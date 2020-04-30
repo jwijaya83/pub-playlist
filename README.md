@@ -40,3 +40,6 @@ Run tests from `tests\` directory:
 `pytest` for running all tests  
 `pytest <tests_filename>.py` for running specific tests.
 
+# UI and NodeJS server Tests
+
+`npm test`

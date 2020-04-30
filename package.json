@@ -82,8 +82,8 @@
   "scripts": {
     "start:ui": "node scripts/start.js",
     "build:ui": "node scripts/build.js",
-    "test:ui": "node scripts/test.js",
-    "start:server": "node server.js"
+    "start:server": "node server.js",
+    "test": "node scripts/test-config.js"
   },
   "eslintConfig": {
     "extends": "react-app"
@@ -104,5 +104,9 @@
     "presets": [
       "react-app"
     ]
+  },
+  "devDependencies": {
+    "graphql-tester": "shalkam/graphql-tester",
+    "jest-json-schema": "^2.1.0"
   }
 }
