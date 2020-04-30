@@ -86,3 +86,25 @@
 .name:hover > .edit {
     display: block;
 }
+
+.delete-playlist {
+    position: relative;
+    background: transparent;
+    border: none;
+    box-shadow: none;
+    cursor: pointer;
+    color: #333333;
+    padding: 5px;
+    transition: all 0.1s ease-out;
+    bottom: 15px;
+    margin: auto;
+    display: none;
+}
+
+.delete-playlist:hover {
+    transform: scale(1.15);
+}
+
+.Playlist:hover .delete-playlist {
+    display: block;
+}
