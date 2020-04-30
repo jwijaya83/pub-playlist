@@ -50,6 +50,7 @@ export class Playlist extends Component {
                 }
             });
             this.props.handlePlaylistsUpdating();
+            window.location.reload();
             this.handleEditName(false);
         }
     };

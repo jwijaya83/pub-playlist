@@ -34,17 +34,16 @@ export class Playlists extends Component {
     topBar() {
         return (
             <TopBar title="My Playlists">
-                <NewPlaylist handlePlaylistsUpdating={this.handlePlaylistsUpdating} />
+                <NewPlaylist handlePlaylistsUpdating={() => {this.handlePlaylistsUpdating(); window.location.reload();}} />
             </TopBar>
         )
     }
 
     handlePlaylistsUpdating = (playlist) => {
-        const { trigger, refetch } = this.state;
+        const { trigger } = this.state;
         this.setState({
             trigger: !trigger,
         });
-        refetch();
     }
 
     render() {
@@ -56,9 +55,7 @@ export class Playlists extends Component {
         }
 
         return <Query query={GET_PLAYLISTS}>{({loading, error, data, refetch}) => {
-            if (!this.state.refetch) {
-                this.setState({ refetch });
-            }
+
             if (loading) return <NoResults message="Loading..."/>;
             if (error) return <p>Error :(</p>;
             if (data.playlists.count === 0) return <NoResults
