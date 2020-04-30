@@ -97,7 +97,7 @@
     padding: 5px;
     transition: all 0.1s ease-out;
     bottom: 15px;
-    margin: auto;
+    left: -10px;
     display: none;
 }
 
