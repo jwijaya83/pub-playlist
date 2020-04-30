@@ -45,18 +45,6 @@
   transform: scale(1.15);
 }
 
-.close-button {
-  position: absolute;
-  right: 10px;
-  top: 10px;
-  width: 40px;
-  height: 40px;
-}
-
-.gap {
-  height: 25px;
-}
-
 .number {
   font-size: 12px;
   opacity: 0.7;
