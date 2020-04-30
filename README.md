@@ -34,6 +34,12 @@ npm run start:ui
 ```
 Served at http://localhost:4000/
 
+#### Unit and Integration tests
+
+```bash
+npm test
+```
+
 #### Automated tests
 Install Python v3.7.*  
 Download Chrome Driver from https://chromedriver.chromium.org/downloads  
